@@ -24,14 +24,11 @@ npm run dev
 
 Abrir la dirección local indicada en la terminal.
 
-## Controles
+## Escena
 
-La aplicación muestra un cubo iluminado que gira sobre su eje vertical.
-
-- **Espacio:** cambiar el color del cubo.
-- **R:** detener o reanudar la rotación.
-
-Cada pulsación se procesa una vez; mantener la tecla no repite la acción.
+La aplicación muestra un campo de tiro con suelo marrón y tres objetivos
+esféricos a distintas alturas y profundidades. La cámara en perspectiva es fija.
+La vista actual es estática y no tiene controles de teclado.
 
 ## Compilación
 
