@@ -8,6 +8,8 @@ export const COLORS = {
   turret: [0.24, 0.27, 0.30],
   barrel: [0.19, 0.22, 0.25],
   muzzle: [0.07, 0.08, 0.09],
+  powerOff: [0.035, 0.19, 0.08],
+  powerOn: [0.45, 1, 0.28],
 } satisfies Record<string, Color>;
 
 export const TARGETS = [

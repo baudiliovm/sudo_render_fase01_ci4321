@@ -59,7 +59,13 @@ export function createRenderer(canvas: HTMLCanvasElement) {
         ff.setModelMatrix(object.model);
         if (!mat3.normalFromMat4(normal, object.model)) throw new Error('Invalid model transform.');
         ff.setNormalMatrix(normal);
-        ff.setMaterial({ ambient: object.color, diffuse: object.color, specular: [0.08, 0.08, 0.08], shininess: 16 });
+        if (object.unlit) {
+          ff.disable(LIGHTING);
+          ff.setColor(object.color);
+        } else {
+          ff.enable(LIGHTING);
+          ff.setMaterial({ ambient: object.color, diffuse: object.color, specular: [0.08, 0.08, 0.08], shininess: 16 });
+        }
         gl.bindVertexArray(mesh.vao);
         ff.drawElements(gl.TRIANGLES, mesh.count, gl.UNSIGNED_SHORT, 0);
       }

@@ -7,5 +7,6 @@ export interface SceneObject {
   mesh: MeshName;
   model: ReadonlyMat4;
   color: Color;
+  unlit?: boolean;
 }
 

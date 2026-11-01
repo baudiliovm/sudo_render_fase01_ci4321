@@ -37,6 +37,11 @@ La cámara en perspectiva es fija, detrás y por encima de la torreta.
 
 - **Flechas izquierda y derecha:** desplazar la torreta lateralmente entre −8 y 8 unidades.
 - **Flechas arriba y abajo:** cambiar la elevación entre 5° y 90°, ambos incluidos.
+- **1, 2 y 3:** elegir el nivel de fuerza, también desde el teclado numérico.
+
+Tres barras en la cara trasera del cuerpo muestran la fuerza seleccionada:
+el nivel N enciende las N barras inferiores en verde claro. Las demás permanecen
+en verde oscuro y la barra inferior siempre está encendida.
 
 El cuerpo mantiene su orientación; la torreta y el tubo comparten el pivote de elevación.
 

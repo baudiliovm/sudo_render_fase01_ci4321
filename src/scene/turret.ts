@@ -2,7 +2,7 @@ import { mat4, type ReadonlyMat4, type ReadonlyVec3 } from 'gl-matrix';
 import { COLORS } from '../config/scene';
 import type { Color } from '../vendor/ff/ff';
 import type { MeshName, SceneObject } from '../rendering/types';
-import type { TurretPose } from '../game/types';
+import type { PowerLevel, TurretPose } from '../game/types';
 
 export const TURRET = {
   pivotHeight: 1.6,
@@ -17,13 +17,13 @@ export function getTurretTransforms(pose: TurretPose) {
   return { body, aiming, muzzle };
 }
 
-export function createTurret(pose: TurretPose): SceneObject[] {
+export function createTurret(pose: TurretPose, powerLevel: PowerLevel): SceneObject[] {
   const { body, aiming } = getTurretTransforms(pose);
   const objects: SceneObject[] = [];
-  const part = (mesh: MeshName, parent: ReadonlyMat4, position: ReadonlyVec3, scale: ReadonlyVec3, color: Color) => {
+  const part = (mesh: MeshName, parent: ReadonlyMat4, position: ReadonlyVec3, scale: ReadonlyVec3, color: Color, unlit = false) => {
     const model = mat4.translate(mat4.create(), parent, position);
     mat4.scale(model, model, scale);
-    objects.push({ mesh, model, color });
+    objects.push({ mesh, model, color, unlit });
   };
 
   part('box', body, [0, 0.14, 0], [3.0, 0.28, 2.8], COLORS.base);
@@ -35,5 +35,10 @@ export function createTurret(pose: TurretPose): SceneObject[] {
   part('cylinder', aiming, [0, 0, -0.3], [0.26, 0.26, 0.55], COLORS.base);
   part('cylinder', aiming, [0, 0, -2.25], [0.24, 0.24, 0.2], COLORS.turret);
   part('cylinder', aiming, [0, 0, -2.45], [0.165, 0.165, 0.002], COLORS.muzzle);
+
+  part('box', body, [0, 0.74, 1.25], [1.65, 0.86, 0.04], COLORS.base);
+  for (let i = 0; i < 3; i++) {
+    part('box', body, [0, 0.47 + i * 0.27, 1.29], [1.3, 0.14, 0.035], i < powerLevel ? COLORS.powerOn : COLORS.powerOff, true);
+  }
   return objects;
 }
