@@ -1,4 +1,6 @@
-const CONTROL_KEYS = new Set(['ArrowLeft', 'ArrowRight']);
+import type { AimingInput } from '../game/types';
+
+const CONTROL_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
 
 export function createKeyboardInput(target: Window) {
   const held = new Set<string>();
@@ -22,8 +24,11 @@ export function createKeyboardInput(target: Window) {
   target.document.addEventListener('visibilitychange', onVisibilityChange);
 
   return {
-    readHorizontal(): number {
-      return Number(held.has('ArrowRight')) - Number(held.has('ArrowLeft'));
+    read(): AimingInput {
+      return {
+        horizontal: Number(held.has('ArrowRight')) - Number(held.has('ArrowLeft')),
+        elevation: Number(held.has('ArrowUp')) - Number(held.has('ArrowDown')),
+      };
     },
     dispose(): void {
       target.removeEventListener('keydown', onKeyDown);

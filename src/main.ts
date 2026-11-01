@@ -20,7 +20,7 @@ document.addEventListener('visibilitychange', () => { lastTime = null; });
 function frame(now: number): void {
   const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, 0.1);
   lastTime = now;
-  updateGameState(state, keyboard.readHorizontal(), dt);
+  updateGameState(state, keyboard.read(), dt);
   renderer.render(createScene(state));
   requestAnimationFrame(frame);
 }

@@ -3,3 +3,8 @@ export interface TurretPose {
   /** Elevation in degrees, measured from the ground. */
   elevation: number;
 }
+
+export interface AimingInput {
+  horizontal: number;
+  elevation: number;
+}

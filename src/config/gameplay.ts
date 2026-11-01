@@ -3,4 +3,7 @@ export const AIMING = {
   maxX: 8,
   movementSpeed: 6,
   initialElevation: 35,
+  minElevation: 5,
+  maxElevation: 90,
+  elevationSpeed: 45,
 } as const;

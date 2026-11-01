@@ -36,6 +36,9 @@ La cámara en perspectiva es fija, detrás y por encima de la torreta.
 ## Controles
 
 - **Flechas izquierda y derecha:** desplazar la torreta lateralmente entre −8 y 8 unidades.
+- **Flechas arriba y abajo:** cambiar la elevación entre 5° y 90°, ambos incluidos.
+
+El cuerpo mantiene su orientación; la torreta y el tubo comparten el pivote de elevación.
 
 Mantener una flecha produce movimiento continuo. Las teclas opuestas se cancelan
 y el movimiento se detiene al perder el foco de la ventana.
