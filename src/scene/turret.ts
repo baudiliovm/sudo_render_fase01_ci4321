@@ -2,18 +2,12 @@ import { mat4, type ReadonlyMat4, type ReadonlyVec3 } from 'gl-matrix';
 import { COLORS } from '../config/scene';
 import type { Color } from '../vendor/ff/ff';
 import type { MeshName, SceneObject } from '../rendering/types';
+import type { TurretPose } from '../game/types';
 
 export const TURRET = {
   pivotHeight: 1.6,
   barrelLength: 2.45,
-  initialElevation: 35,
 } as const;
-
-export interface TurretPose {
-  x: number;
-  /** Elevation in degrees, measured from the ground. */
-  elevation: number;
-}
 
 export function getTurretTransforms(pose: TurretPose) {
   const body = mat4.fromTranslation(mat4.create(), [pose.x, 0, 0]);

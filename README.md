@@ -32,7 +32,13 @@ un cuerpo, una pieza esférica y un tubo cilíndrico. Las primitivas se generan
 mediante código y usan iluminación con normales por cara.
 
 La cámara en perspectiva es fija, detrás y por encima de la torreta.
-La vista actual es estática y no tiene controles de teclado.
+
+## Controles
+
+- **Flechas izquierda y derecha:** desplazar la torreta lateralmente entre −8 y 8 unidades.
+
+Mantener una flecha produce movimiento continuo. Las teclas opuestas se cancelan
+y el movimiento se detiene al perder el foco de la ventana.
 
 ## Compilación
 
