@@ -27,7 +27,11 @@ Abrir la dirección local indicada en la terminal.
 ## Escena
 
 La aplicación muestra un campo de tiro con suelo marrón y tres objetivos
-esféricos a distintas alturas y profundidades. La cámara en perspectiva es fija.
+esféricos a distintas alturas y profundidades, y una torreta gris formada por
+un cuerpo, una pieza esférica y un tubo cilíndrico. Las primitivas se generan
+mediante código y usan iluminación con normales por cara.
+
+La cámara en perspectiva es fija, detrás y por encima de la torreta.
 La vista actual es estática y no tiene controles de teclado.
 
 ## Compilación

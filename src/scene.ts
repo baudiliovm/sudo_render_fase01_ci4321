@@ -1,6 +1,7 @@
 import { mat4, type ReadonlyVec3 } from 'gl-matrix';
 import { COLORS, TARGETS } from './constants';
 import type { SceneObject } from './renderer';
+import { createTurret, TURRET } from './turret';
 
 export function transform(position: ReadonlyVec3, scale: ReadonlyVec3): mat4 {
   const model = mat4.fromTranslation(mat4.create(), position);
@@ -14,5 +15,6 @@ export function createScene(): SceneObject[] {
   for (const target of TARGETS) {
     objects.push({ mesh: 'sphere', model: transform(target.position, [target.radius, target.radius, target.radius]), color: COLORS.target });
   }
+  objects.push(...createTurret({ x: 0, elevation: TURRET.initialElevation }));
   return objects;
 }

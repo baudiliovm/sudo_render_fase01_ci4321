@@ -1,0 +1,45 @@
+import { mat4, type ReadonlyMat4, type ReadonlyVec3 } from 'gl-matrix';
+import { COLORS } from './constants';
+import type { Color } from './vendor/ff/ff';
+import type { MeshName, SceneObject } from './renderer';
+
+export const TURRET = {
+  pivotHeight: 1.6,
+  barrelLength: 2.45,
+  initialElevation: 35,
+} as const;
+
+export interface TurretPose {
+  x: number;
+  /** Elevation in degrees, measured from the ground. */
+  elevation: number;
+}
+
+export function getTurretTransforms(pose: TurretPose) {
+  const body = mat4.fromTranslation(mat4.create(), [pose.x, 0, 0]);
+  const aiming = mat4.translate(mat4.create(), body, [0, TURRET.pivotHeight, 0]);
+  mat4.rotateX(aiming, aiming, pose.elevation * Math.PI / 180);
+  const muzzle = mat4.translate(mat4.create(), aiming, [0, 0, -TURRET.barrelLength]);
+  return { body, aiming, muzzle };
+}
+
+export function createTurret(pose: TurretPose): SceneObject[] {
+  const { body, aiming } = getTurretTransforms(pose);
+  const objects: SceneObject[] = [];
+  const part = (mesh: MeshName, parent: ReadonlyMat4, position: ReadonlyVec3, scale: ReadonlyVec3, color: Color) => {
+    const model = mat4.translate(mat4.create(), parent, position);
+    mat4.scale(model, model, scale);
+    objects.push({ mesh, model, color });
+  };
+
+  part('box', body, [0, 0.14, 0], [3.0, 0.28, 2.8], COLORS.base);
+  part('box', body, [0, 0.755, 0], [2.65, 0.95, 2.45], COLORS.body);
+  part('box', body, [0, 1.25, 0], [2.8, 0.14, 2.6], COLORS.turret);
+
+  part('sphere', aiming, [0, 0, 0], [0.72, 0.72, 0.72], COLORS.turret);
+  part('cylinder', aiming, [0, 0, -0.25], [0.18, 0.18, 2.2], COLORS.barrel);
+  part('cylinder', aiming, [0, 0, -0.3], [0.26, 0.26, 0.55], COLORS.base);
+  part('cylinder', aiming, [0, 0, -2.25], [0.24, 0.24, 0.2], COLORS.turret);
+  part('cylinder', aiming, [0, 0, -2.45], [0.165, 0.165, 0.002], COLORS.muzzle);
+  return objects;
+}
