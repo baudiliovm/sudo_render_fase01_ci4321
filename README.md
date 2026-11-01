@@ -48,6 +48,9 @@ El cuerpo mantiene su orientación; la torreta y el tubo comparten el pivote de 
 Mantener una flecha produce movimiento continuo. Las teclas opuestas se cancelan
 y el movimiento se detiene al perder el foco de la ventana.
 
+La esfera negra reposa en la boca del tubo y acompaña el desplazamiento y la
+elevación del cañón. El disparo todavía no está disponible.
+
 ## Compilación
 
 ```bash

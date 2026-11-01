@@ -14,14 +14,18 @@ const renderer = createRenderer(canvas);
 const state = createGameState();
 const keyboard = createKeyboardInput(window);
 let lastTime: number | null = null;
+renderer.render(createScene(state));
 
 document.addEventListener('visibilitychange', () => { lastTime = null; });
 
 function frame(now: number): void {
   const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, 0.1);
   lastTime = now;
+  const { x, elevation, powerLevel } = state;
   updateGameState(state, keyboard.read(), dt);
-  renderer.render(createScene(state));
+  if (state.x !== x || state.elevation !== elevation || state.powerLevel !== powerLevel) {
+    renderer.render(createScene(state));
+  }
   requestAnimationFrame(frame);
 }
 

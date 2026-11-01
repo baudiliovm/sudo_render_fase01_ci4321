@@ -3,6 +3,7 @@ import { COLORS, TARGETS } from '../config/scene';
 import type { SceneObject } from '../rendering/types';
 import { createTurret } from './turret';
 import type { GameState } from '../game/types';
+import { createLoadedProjectile } from './projectile';
 
 export function transform(position: ReadonlyVec3, scale: ReadonlyVec3): mat4 {
   const model = mat4.fromTranslation(mat4.create(), position);
@@ -17,5 +18,6 @@ export function createScene(state: GameState): SceneObject[] {
     objects.push({ mesh: 'sphere', model: transform(target.position, [target.radius, target.radius, target.radius]), color: COLORS.target });
   }
   objects.push(...createTurret(state, state.powerLevel));
+  objects.push(createLoadedProjectile(state));
   return objects;
 }

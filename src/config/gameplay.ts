@@ -7,3 +7,7 @@ export const AIMING = {
   maxElevation: 90,
   elevationSpeed: 45,
 } as const;
+
+export const PROJECTILE = {
+  radius: 0.18,
+} as const;

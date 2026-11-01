@@ -10,6 +10,7 @@ export const COLORS = {
   muzzle: [0.07, 0.08, 0.09],
   powerOff: [0.035, 0.19, 0.08],
   powerOn: [0.45, 1, 0.28],
+  projectile: [0.015, 0.015, 0.02],
 } satisfies Record<string, Color>;
 
 export const TARGETS = [
