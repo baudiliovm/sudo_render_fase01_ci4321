@@ -1,6 +1,6 @@
-import './style.css';
-import { createRenderer } from './renderer';
-import { createScene } from './scene';
+import './styles/main.css';
+import { createRenderer } from './rendering/renderer';
+import { createScene } from './scene/scene';
 
 const canvas = document.createElement('canvas');
 canvas.setAttribute('aria-label', 'Torreta gris frente a tres objetivos esféricos en un campo de tiro');

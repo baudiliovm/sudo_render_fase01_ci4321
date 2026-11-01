@@ -1,6 +1,6 @@
 import { mat4, type ReadonlyVec3 } from 'gl-matrix';
-import { COLORS, TARGETS } from './constants';
-import type { SceneObject } from './renderer';
+import { COLORS, TARGETS } from '../config/scene';
+import type { SceneObject } from '../rendering/types';
 import { createTurret, TURRET } from './turret';
 
 export function transform(position: ReadonlyVec3, scale: ReadonlyVec3): mat4 {

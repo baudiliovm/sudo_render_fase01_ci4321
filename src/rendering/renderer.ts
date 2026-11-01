@@ -1,15 +1,9 @@
-import { mat3, mat4, type ReadonlyMat4 } from 'gl-matrix';
-import { ATTRIB, createFixedFunction, LIGHTING, type Color } from './vendor/ff/ff';
-import { CANVAS_HEIGHT, CANVAS_WIDTH, CLEAR_COLOR } from './constants';
+import { mat3, mat4 } from 'gl-matrix';
+import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CLEAR_COLOR } from '../config/rendering';
 import { createBox, createCylinder, createPlane, createSphere, type MeshData } from './geometry';
 
-export type MeshName = 'plane' | 'box' | 'sphere' | 'cylinder';
-
-export interface SceneObject {
-  mesh: MeshName;
-  model: ReadonlyMat4;
-  color: Color;
-}
+import type { SceneObject } from './types';
 
 function uploadMesh(gl: WebGL2RenderingContext, data: MeshData) {
   const vao = gl.createVertexArray();

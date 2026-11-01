@@ -1,7 +1,7 @@
 import { mat4, type ReadonlyMat4, type ReadonlyVec3 } from 'gl-matrix';
-import { COLORS } from './constants';
-import type { Color } from './vendor/ff/ff';
-import type { MeshName, SceneObject } from './renderer';
+import { COLORS } from '../config/scene';
+import type { Color } from '../vendor/ff/ff';
+import type { MeshName, SceneObject } from '../rendering/types';
 
 export const TURRET = {
   pivotHeight: 1.6,
