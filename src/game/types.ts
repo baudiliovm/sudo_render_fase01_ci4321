@@ -13,6 +13,7 @@ export interface AimingInput {
   elevation: number;
   powerLevel?: PowerLevel;
   fire: boolean;
+  reset: boolean;
 }
 
 export interface ActiveProjectile {

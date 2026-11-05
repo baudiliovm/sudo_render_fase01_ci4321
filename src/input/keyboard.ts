@@ -14,6 +14,7 @@ const CONTROL_KEYS = new Set([
   "ArrowUp",
   "ArrowDown",
   "Space",
+  "KeyR",
   ...POWER_KEYS.keys(),
 ]);
 
@@ -21,6 +22,7 @@ export function createKeyboardInput(target: Window) {
   const held = new Set<string>();
   let pendingPower: PowerLevel | undefined;
   let pendingFire = false;
+  let pendingReset = false;
 
   const onKeyDown = (event: KeyboardEvent): void => {
     if (
@@ -31,6 +33,10 @@ export function createKeyboardInput(target: Window) {
     )
       return;
     event.preventDefault();
+    if (event.code === "KeyR") {
+      if (!event.repeat) pendingReset = true;
+      return;
+    }
     if (event.code === "Space") {
       if (!event.repeat) pendingFire = true;
       return;
@@ -51,6 +57,7 @@ export function createKeyboardInput(target: Window) {
     held.clear();
     pendingPower = undefined;
     pendingFire = false;
+    pendingReset = false;
   };
   const onVisibilityChange = (): void => {
     if (target.document.hidden) clear();
@@ -65,14 +72,17 @@ export function createKeyboardInput(target: Window) {
     read(): AimingInput {
       const powerLevel = pendingPower;
       const fire = pendingFire;
+      const reset = pendingReset;
       pendingPower = undefined;
       pendingFire = false;
+      pendingReset = false;
       return {
         horizontal:
           Number(held.has("ArrowRight")) - Number(held.has("ArrowLeft")),
         elevation: Number(held.has("ArrowUp")) - Number(held.has("ArrowDown")),
         powerLevel,
         fire,
+        reset,
       };
     },
     dispose(): void {

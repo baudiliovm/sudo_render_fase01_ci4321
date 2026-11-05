@@ -13,11 +13,20 @@ export function createGameState(): GameState {
   };
 }
 
+export function resetGameState(state: GameState): void {
+  Object.assign(state, createGameState());
+}
+
 export function updateGameState(
   state: GameState,
   input: AimingInput,
   dt: number,
 ): boolean {
+  if (input.reset) {
+    resetGameState(state);
+    return true;
+  }
+
   const { x, elevation, powerLevel } = state;
   if (input.powerLevel !== undefined) state.powerLevel = input.powerLevel;
 
