@@ -44,10 +44,11 @@ export type Impact =
 
 function distanceSquared(
   shot: ActiveProjectile,
-  center: Vec3,
+  centerAt: (time: number) => Vec3,
   time: number,
 ): number {
   const point = projectilePosition(shot, time);
+  const center = centerAt(time);
   return (
     (point[0] - center[0]) ** 2 +
     (point[1] - center[1]) ** 2 +
@@ -58,25 +59,25 @@ function distanceSquared(
 /** Look for the first intersection along the projectile path. */
 function sphereContact(
   shot: ActiveProjectile,
-  center: Vec3,
+  centerAt: (time: number) => Vec3,
   combinedRadius: number,
   start: number,
   end: number,
 ): number | null {
   const radiusSquared = combinedRadius * combinedRadius;
-  if (distanceSquared(shot, center, start) <= radiusSquared) return start;
+  if (distanceSquared(shot, centerAt, start) <= radiusSquared) return start;
 
   // Test intermediate positions as well as the end of the frame.
   const steps = Math.max(1, Math.ceil((end - start) * 240));
   let previous = start;
   for (let i = 1; i <= steps; i++) {
     const current = start + ((end - start) * i) / steps;
-    if (distanceSquared(shot, center, current) <= radiusSquared) {
+    if (distanceSquared(shot, centerAt, current) <= radiusSquared) {
       let low = previous;
       let high = current;
       for (let k = 0; k < 24; k++) {
         const middle = (low + high) / 2;
-        if (distanceSquared(shot, center, middle) <= radiusSquared) {
+        if (distanceSquared(shot, centerAt, middle) <= radiusSquared) {
           high = middle;
         } else {
           low = middle;
@@ -95,6 +96,7 @@ export function firstImpact(
   end: number,
   targets: readonly { readonly position: Vec3; readonly radius: number }[],
   hitTargets: readonly boolean[],
+  targetAt?: (index: number, time: number) => Vec3,
 ): Impact | null {
   const groundDiscriminant =
     shot.velocity[1] ** 2 +
@@ -113,7 +115,7 @@ export function firstImpact(
     const target = targets[index];
     const contact = sphereContact(
       shot,
-      target.position,
+      (time) => targetAt?.(index, time) ?? target.position,
       target.radius + PROJECTILE.radius,
       start,
       Math.min(end, first?.time ?? end),

@@ -1,6 +1,7 @@
 import { AIMING } from "../config/gameplay";
 import { TARGETS } from "../config/scene";
 import { firstImpact, launchProjectile } from "./physics";
+import { getTargetPosition } from "./targets";
 import type { AimingInput, GameEvent, GameState } from "./types";
 
 export function createGameState(): GameState {
@@ -11,6 +12,8 @@ export function createGameState(): GameState {
     projectile: null,
     hitTargets: TARGETS.map(() => false),
     shotsFired: 0,
+    difficulty: "normal",
+    targetTime: 0,
   };
 }
 
@@ -31,6 +34,13 @@ export function updateGameState(
   }
 
   const { x, elevation, powerLevel } = state;
+  let changed = false;
+  if (input.difficulty !== undefined && input.difficulty !== state.difficulty) {
+    state.difficulty = input.difficulty;
+    state.targetTime = 0;
+    onEvent?.({ kind: "difficulty", difficulty: state.difficulty });
+    changed = true;
+  }
   if (input.powerLevel !== undefined) state.powerLevel = input.powerLevel;
 
   state.x = Math.max(
@@ -48,7 +58,8 @@ export function updateGameState(
     ),
   );
 
-  let changed =
+  changed =
+    changed ||
     state.x !== x ||
     state.elevation !== elevation ||
     state.powerLevel !== powerLevel;
@@ -69,6 +80,12 @@ export function updateGameState(
       end,
       TARGETS,
       state.hitTargets,
+      (index, shotTime) =>
+        getTargetPosition(
+          index,
+          state.difficulty,
+          state.targetTime + (shotTime - shot.elapsed),
+        ),
     );
     if (impact !== null) {
       if (impact.kind === "target") {
@@ -84,6 +101,10 @@ export function updateGameState(
       shot.elapsed = end;
     }
     changed = true;
+  }
+  if (dt > 0 && state.difficulty !== "normal") {
+    state.targetTime += dt;
+    if (state.hitTargets.some((hit) => !hit)) changed = true;
   }
   return changed;
 }

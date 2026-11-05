@@ -7,6 +7,7 @@ export interface TurretPose {
 }
 
 export type PowerLevel = 1 | 2 | 3;
+export type Difficulty = "normal" | "hard" | "extreme";
 
 export interface AimingInput {
   horizontal: number;
@@ -14,6 +15,7 @@ export interface AimingInput {
   powerLevel?: PowerLevel;
   fire: boolean;
   reset: boolean;
+  difficulty?: Difficulty;
 }
 
 export interface ActiveProjectile {
@@ -29,6 +31,8 @@ export interface GameState extends TurretPose {
   projectile: ActiveProjectile | null;
   hitTargets: boolean[];
   shotsFired: number;
+  difficulty: Difficulty;
+  targetTime: number;
 }
 
 export type GameEvent =
@@ -36,4 +40,5 @@ export type GameEvent =
   | { kind: "hit"; index: number; hits: number; total: number }
   | { kind: "ground" }
   | { kind: "won"; shots: number }
-  | { kind: "reset" };
+  | { kind: "reset" }
+  | { kind: "difficulty"; difficulty: Difficulty };

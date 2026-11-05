@@ -1,4 +1,4 @@
-import type { AimingInput, PowerLevel } from "../game/types";
+import type { AimingInput, Difficulty, PowerLevel } from "../game/types";
 
 const POWER_KEYS = new Map<string, PowerLevel>([
   ["Digit1", 1],
@@ -8,6 +8,15 @@ const POWER_KEYS = new Map<string, PowerLevel>([
   ["Numpad2", 2],
   ["Numpad3", 3],
 ]);
+const DIFFICULTY_KEYS = new Map<string, Difficulty>([
+  ["Digit7", "normal"],
+  ["Digit8", "hard"],
+  ["Digit9", "extreme"],
+  ["Numpad7", "normal"],
+  ["Numpad8", "hard"],
+  ["Numpad9", "extreme"],
+]);
+
 const CONTROL_KEYS = new Set([
   "ArrowLeft",
   "ArrowRight",
@@ -16,6 +25,7 @@ const CONTROL_KEYS = new Set([
   "Space",
   "KeyR",
   ...POWER_KEYS.keys(),
+  ...DIFFICULTY_KEYS.keys(),
 ]);
 
 export function createKeyboardInput(target: Window) {
@@ -23,6 +33,7 @@ export function createKeyboardInput(target: Window) {
   let pendingPower: PowerLevel | undefined;
   let pendingFire = false;
   let pendingReset = false;
+  let pendingDifficulty: Difficulty | undefined;
 
   const onKeyDown = (event: KeyboardEvent): void => {
     if (
@@ -39,6 +50,11 @@ export function createKeyboardInput(target: Window) {
     }
     if (event.code === "Space") {
       if (!event.repeat) pendingFire = true;
+      return;
+    }
+    const difficulty = DIFFICULTY_KEYS.get(event.code);
+    if (difficulty !== undefined) {
+      if (!event.repeat) pendingDifficulty = difficulty;
       return;
     }
     const powerLevel = POWER_KEYS.get(event.code);
@@ -58,6 +74,7 @@ export function createKeyboardInput(target: Window) {
     pendingPower = undefined;
     pendingFire = false;
     pendingReset = false;
+    pendingDifficulty = undefined;
   };
   const onVisibilityChange = (): void => {
     if (target.document.hidden) clear();
@@ -73,9 +90,11 @@ export function createKeyboardInput(target: Window) {
       const powerLevel = pendingPower;
       const fire = pendingFire;
       const reset = pendingReset;
+      const difficulty = pendingDifficulty;
       pendingPower = undefined;
       pendingFire = false;
       pendingReset = false;
+      pendingDifficulty = undefined;
       return {
         horizontal:
           Number(held.has("ArrowRight")) - Number(held.has("ArrowLeft")),
@@ -83,6 +102,7 @@ export function createKeyboardInput(target: Window) {
         powerLevel,
         fire,
         reset,
+        difficulty,
       };
     },
     dispose(): void {

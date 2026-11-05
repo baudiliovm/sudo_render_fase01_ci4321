@@ -4,13 +4,15 @@ export function createHud(state: GameState): (event: GameEvent) => void {
   const hitCount = document.getElementById("hit-count");
   const shotCount = document.getElementById("shot-count");
   const gameMessage = document.getElementById("game-message");
-  if (!hitCount || !shotCount || !gameMessage) {
+  const difficultyName = document.getElementById("difficulty-name");
+  if (!hitCount || !shotCount || !gameMessage || !difficultyName) {
     throw new Error("Game status elements not found.");
   }
 
   const update = () => {
     hitCount.textContent = `${state.hitTargets.filter(Boolean).length}/${state.hitTargets.length}`;
     shotCount.textContent = `${state.shotsFired}`;
+    difficultyName.textContent = ({ normal: "Normal", hard: "Difícil", extreme: "Extremo" })[state.difficulty];
   };
 
   const notify = (event: GameEvent): void => {
@@ -35,6 +37,12 @@ export function createHud(state: GameState): (event: GameEvent) => void {
         console.info("[Sudo Render] Partida reiniciada. Objetivos y bala restaurados.");
         gameMessage.textContent = "Nueva partida";
         break;
+      case "difficulty": {
+        const label = ({ normal: "Normal", hard: "Difícil", extreme: "Extremo" })[event.difficulty];
+        console.info(`[Sudo Render] Dificultad seleccionada: ${label}.`);
+        gameMessage.textContent = `Modo ${label}`;
+        break;
+      }
     }
     update();
   };
