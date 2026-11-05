@@ -42,5 +42,11 @@ export function updateGameState(
     state.projectile = launchProjectile(state, state.powerLevel);
     changed = true;
   }
+  // Evaluate the ballistic formula from launch time, not by accumulating
+  // a displacement per frame. This keeps the trajectory independent of FPS.
+  if (state.projectile !== null && dt > 0) {
+    state.projectile.elapsed += dt;
+    changed = true;
+  }
   return changed;
 }

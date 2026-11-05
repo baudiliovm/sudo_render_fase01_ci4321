@@ -25,6 +25,15 @@ export function launchProjectile(
   };
 }
 
-export function projectilePosition(shot: ActiveProjectile): Vec3 {
-  return shot.origin;
+export function projectilePosition(
+  shot: ActiveProjectile,
+  time = shot.elapsed,
+): Vec3 {
+  return [
+    shot.origin[0] + shot.velocity[0] * time,
+    shot.origin[1] +
+      shot.velocity[1] * time -
+      0.5 * PROJECTILE.gravity * time * time,
+    shot.origin[2] + shot.velocity[2] * time,
+  ];
 }
