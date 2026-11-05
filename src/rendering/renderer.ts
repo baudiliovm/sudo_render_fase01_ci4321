@@ -1,15 +1,22 @@
-import { mat3, mat4 } from 'gl-matrix';
-import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
-import { CANVAS_HEIGHT, CANVAS_WIDTH, CLEAR_COLOR } from '../config/rendering';
-import { createBox, createCylinder, createPlane, createSphere, type MeshData } from './geometry';
+import { mat3, mat4 } from "gl-matrix";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CLEAR_COLOR } from "../config/rendering";
+import { ATTRIB, createFixedFunction, LIGHTING } from "../vendor/ff/ff";
+import {
+  createBox,
+  createCylinder,
+  createPlane,
+  createSphere,
+  type MeshData,
+} from "./geometry";
 
-import type { SceneObject } from './types';
+import type { SceneObject } from "./types";
 
 function uploadMesh(gl: WebGL2RenderingContext, data: MeshData) {
   const vao = gl.createVertexArray();
   const vertices = gl.createBuffer();
   const indices = gl.createBuffer();
-  if (!vao || !vertices || !indices) throw new Error('Unable to allocate mesh buffers.');
+  if (!vao || !vertices || !indices)
+    throw new Error("Unable to allocate mesh buffers.");
   gl.bindVertexArray(vao);
   gl.bindBuffer(gl.ARRAY_BUFFER, vertices);
   gl.bufferData(gl.ARRAY_BUFFER, data.vertices, gl.STATIC_DRAW);
@@ -25,8 +32,8 @@ function uploadMesh(gl: WebGL2RenderingContext, data: MeshData) {
 }
 
 export function createRenderer(canvas: HTMLCanvasElement) {
-  const context = canvas.getContext('webgl2', { antialias: true });
-  if (!context) throw new Error('WebGL2 is not available.');
+  const context = canvas.getContext("webgl2", { antialias: true });
+  if (!context) throw new Error("WebGL2 is not available.");
   const gl: WebGL2RenderingContext = context;
   const ff = createFixedFunction(gl, { debug: true });
   canvas.width = CANVAS_WIDTH;
@@ -38,10 +45,20 @@ export function createRenderer(canvas: HTMLCanvasElement) {
 
   ff.enable(LIGHTING);
   ff.setGlobalAmbient([0.36, 0.36, 0.38]);
-  ff.setLight(0, { position: [-3, 7, 4, 0], diffuse: [0.75, 0.73, 0.70] });
+  ff.setLight(0, { position: [-3, 7, 4, 0], diffuse: [0.75, 0.73, 0.7] });
   ff.enableLight(0);
-  ff.setViewMatrix(mat4.lookAt(mat4.create(), [0, 11, 18], [0, 4, -16], [0, 1, 0]));
-  ff.setProjectionMatrix(mat4.perspective(mat4.create(), 55 * Math.PI / 180, CANVAS_WIDTH / CANVAS_HEIGHT, 0.1, 180));
+  ff.setViewMatrix(
+    mat4.lookAt(mat4.create(), [0, 11, 18], [0, 4, -16], [0, 1, 0]),
+  );
+  ff.setProjectionMatrix(
+    mat4.perspective(
+      mat4.create(),
+      (55 * Math.PI) / 180,
+      CANVAS_WIDTH / CANVAS_HEIGHT,
+      0.1,
+      180,
+    ),
+  );
 
   const meshes = {
     plane: uploadMesh(gl, createPlane()),
@@ -57,14 +74,20 @@ export function createRenderer(canvas: HTMLCanvasElement) {
       for (const object of objects) {
         const mesh = meshes[object.mesh];
         ff.setModelMatrix(object.model);
-        if (!mat3.normalFromMat4(normal, object.model)) throw new Error('Invalid model transform.');
+        if (!mat3.normalFromMat4(normal, object.model))
+          throw new Error("Invalid model transform.");
         ff.setNormalMatrix(normal);
         if (object.unlit) {
           ff.disable(LIGHTING);
           ff.setColor(object.color);
         } else {
           ff.enable(LIGHTING);
-          ff.setMaterial({ ambient: object.color, diffuse: object.color, specular: [0.08, 0.08, 0.08], shininess: 16 });
+          ff.setMaterial({
+            ambient: object.color,
+            diffuse: object.color,
+            specular: [0.08, 0.08, 0.08],
+            shininess: 16,
+          });
         }
         gl.bindVertexArray(mesh.vao);
         ff.drawElements(gl.TRIANGLES, mesh.count, gl.UNSIGNED_SHORT, 0);

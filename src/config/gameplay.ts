@@ -10,4 +10,6 @@ export const AIMING = {
 
 export const PROJECTILE = {
   radius: 0.18,
+  /** Initial speeds for power levels 1, 2 and 3 (world units per second). */
+  speeds: [12, 17, 22],
 } as const;
