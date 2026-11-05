@@ -58,7 +58,13 @@ export function updateGameState(
   if (state.projectile !== null && dt > 0) {
     const shot = state.projectile;
     const end = shot.elapsed + dt;
-    const impact = firstImpact(shot, shot.elapsed, end, TARGETS, state.hitTargets);
+    const impact = firstImpact(
+      shot,
+      shot.elapsed,
+      end,
+      TARGETS,
+      state.hitTargets,
+    );
     if (impact !== null) {
       if (impact.kind === "target") state.hitTargets[impact.index] = true;
       state.projectile = null;
