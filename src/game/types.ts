@@ -28,4 +28,12 @@ export interface GameState extends TurretPose {
   powerLevel: PowerLevel;
   projectile: ActiveProjectile | null;
   hitTargets: boolean[];
+  shotsFired: number;
 }
+
+export type GameEvent =
+  | { kind: "fire"; power: PowerLevel; shots: number }
+  | { kind: "hit"; index: number; hits: number; total: number }
+  | { kind: "ground" }
+  | { kind: "won"; shots: number }
+  | { kind: "reset" };

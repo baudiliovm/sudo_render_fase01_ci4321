@@ -1,3 +1,4 @@
+import { createHud } from "./ui/hud";
 import { createGameState, updateGameState } from "./game/state";
 import { createKeyboardInput } from "./input/keyboard";
 import { createRenderer } from "./rendering/renderer";
@@ -15,6 +16,7 @@ stage.append(canvas);
 
 const renderer = createRenderer(canvas);
 const state = createGameState();
+const notify = createHud(state);
 const keyboard = createKeyboardInput(window);
 let lastTime: number | null = null;
 renderer.render(createScene(state));
@@ -26,7 +28,7 @@ document.addEventListener("visibilitychange", () => {
 function frame(now: number): void {
   const dt = lastTime === null ? 0 : Math.min((now - lastTime) / 1000, 0.1);
   lastTime = now;
-  if (updateGameState(state, keyboard.read(), dt)) {
+  if (updateGameState(state, keyboard.read(), dt, notify)) {
     renderer.render(createScene(state));
   }
   requestAnimationFrame(frame);

@@ -61,3 +61,14 @@ main {
   aspect-ratio: 4 / 3;
   border: 1px solid #3a4060;
 }
+
+.game-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 4px 16px 10px;
+  color: var(--fg);
+}
+.game-status strong { color: #a9e9b4; }
+#game-message { color: #a9e9b4; }

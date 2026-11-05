@@ -1,7 +1,7 @@
 import { AIMING } from "../config/gameplay";
 import { TARGETS } from "../config/scene";
 import { firstImpact, launchProjectile } from "./physics";
-import type { AimingInput, GameState } from "./types";
+import type { AimingInput, GameEvent, GameState } from "./types";
 
 export function createGameState(): GameState {
   return {
@@ -10,6 +10,7 @@ export function createGameState(): GameState {
     powerLevel: 1,
     projectile: null,
     hitTargets: TARGETS.map(() => false),
+    shotsFired: 0,
   };
 }
 
@@ -21,9 +22,11 @@ export function updateGameState(
   state: GameState,
   input: AimingInput,
   dt: number,
+  onEvent?: (event: GameEvent) => void,
 ): boolean {
   if (input.reset) {
     resetGameState(state);
+    onEvent?.({ kind: "reset" });
     return true;
   }
 
@@ -51,6 +54,8 @@ export function updateGameState(
     state.powerLevel !== powerLevel;
   if (input.fire && state.projectile === null) {
     state.projectile = launchProjectile(state, state.powerLevel);
+    state.shotsFired++;
+    onEvent?.({ kind: "fire", power: state.powerLevel, shots: state.shotsFired });
     changed = true;
   }
   // Evaluate the ballistic formula from launch time, not by accumulating
@@ -66,7 +71,14 @@ export function updateGameState(
       state.hitTargets,
     );
     if (impact !== null) {
-      if (impact.kind === "target") state.hitTargets[impact.index] = true;
+      if (impact.kind === "target") {
+        state.hitTargets[impact.index] = true;
+        const hits = state.hitTargets.filter(Boolean).length;
+        onEvent?.({ kind: "hit", index: impact.index, hits, total: TARGETS.length });
+        if (hits === TARGETS.length) onEvent?.({ kind: "won", shots: state.shotsFired });
+      } else {
+        onEvent?.({ kind: "ground" });
+      }
       state.projectile = null;
     } else {
       shot.elapsed = end;
