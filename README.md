@@ -40,6 +40,7 @@ en código y se renderiza con WebGL2 y la biblioteca FixedFunction del curso.
 | `1`, `2`, `3` (o teclado numérico) | Elegir uno de los tres niveles de fuerza.              |
 | `Espacio`                          | Disparar cuando la bala está disponible.               |
 | `R`                                | Reiniciar el juego y recuperar los objetivos.          |
+| `7`, `8`, `9` (o teclado numérico) | Elegir dificultad Normal, Difícil o Extremo.           |
 
 Tres barras en la parte trasera de la torreta indican el nivel de fuerza:
 las barras activas se muestran en verde claro y las inactivas en verde oscuro.
@@ -64,6 +65,33 @@ disparo, no como un avance fijo por fotograma.
 Como referencia para practicar, con una elevación cercana a 35° podemos
 apuntar a los objetivos desde los desplazamientos laterales −5, 0 y 5,
 utilizando los niveles de fuerza 1, 2 y 3, respectivamente.
+
+## Marcador y dificultades
+
+El marcador situado encima de la escena muestra los aciertos (de 3), los disparos
+realizados y la dificultad actual. Al destruir los tres objetivos aparece un
+mensaje de victoria con la cantidad de disparos utilizados. La consola del
+navegador registra eventos puntuales (disparo, impacto, recarga, reinicio y victoria)
+con `console.info`, sin imprimir mensajes en cada fotograma.
+
+- **7 — Normal:** los tres objetivos se quedan quietos en las posiciones originales.
+- **8 — Difícil:** los tres objetivos se mueven horizontalmente de manera suave.
+- **9 — Extremo:** el movimiento horizontal es más rápido, sin cambiar el tamaño de los objetivos.
+
+Al seleccionar una dificultad, los blancos empiezan a moverse desde su posición
+original. Las colisiones se calculan con sus posiciones durante el vuelo, no con
+las posiciones fijas. Reiniciar con `R` devuelve la dificultad a Normal y pone el
+contador de disparos y aciertos en cero.
+
+## Verificación de 30 y 144 FPS
+
+```bash
+npm run test:fps
+```
+
+Esta prueba ejecuta la lógica real de física y colisiones con pasos de tiempo de
+`1/30` y `1/144` segundos, compara los resultados para los tres niveles de
+dificultad y verifica el reinicio.
 
 ## Compilación
 

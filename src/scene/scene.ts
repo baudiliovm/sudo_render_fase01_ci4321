@@ -1,7 +1,7 @@
 import { mat4, type ReadonlyVec3 } from "gl-matrix";
 import { COLORS, TARGETS } from "../config/scene";
-import type { GameState } from "../game/types";
 import { getTargetPosition } from "../game/targets";
+import type { GameState } from "../game/types";
 import type { SceneObject } from "../rendering/types";
 import { createProjectile } from "./projectile";
 import { createTurret } from "./turret";
@@ -23,11 +23,10 @@ export function createScene(state: GameState): SceneObject[] {
     if (state.hitTargets[index]) continue;
     objects.push({
       mesh: "sphere",
-      model: transform(getTargetPosition(index, state.difficulty, state.targetTime), [
-        target.radius,
-        target.radius,
-        target.radius,
-      ]),
+      model: transform(
+        getTargetPosition(index, state.difficulty, state.targetTime),
+        [target.radius, target.radius, target.radius],
+      ),
       color: COLORS.target,
     });
   }

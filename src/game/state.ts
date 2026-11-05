@@ -66,7 +66,11 @@ export function updateGameState(
   if (input.fire && state.projectile === null) {
     state.projectile = launchProjectile(state, state.powerLevel);
     state.shotsFired++;
-    onEvent?.({ kind: "fire", power: state.powerLevel, shots: state.shotsFired });
+    onEvent?.({
+      kind: "fire",
+      power: state.powerLevel,
+      shots: state.shotsFired,
+    });
     changed = true;
   }
   // Evaluate the ballistic formula from launch time, not by accumulating
@@ -91,8 +95,14 @@ export function updateGameState(
       if (impact.kind === "target") {
         state.hitTargets[impact.index] = true;
         const hits = state.hitTargets.filter(Boolean).length;
-        onEvent?.({ kind: "hit", index: impact.index, hits, total: TARGETS.length });
-        if (hits === TARGETS.length) onEvent?.({ kind: "won", shots: state.shotsFired });
+        onEvent?.({
+          kind: "hit",
+          index: impact.index,
+          hits,
+          total: TARGETS.length,
+        });
+        if (hits === TARGETS.length)
+          onEvent?.({ kind: "won", shots: state.shotsFired });
       } else {
         onEvent?.({ kind: "ground" });
       }

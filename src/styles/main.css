@@ -70,5 +70,9 @@ main {
   padding: 4px 16px 10px;
   color: var(--fg);
 }
-.game-status strong { color: #a9e9b4; }
-#game-message { color: #a9e9b4; }
+.game-status strong {
+  color: #a9e9b4;
+}
+#game-message {
+  color: #a9e9b4;
+}

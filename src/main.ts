@@ -1,9 +1,9 @@
-import { createHud } from "./ui/hud";
 import { createGameState, updateGameState } from "./game/state";
 import { createKeyboardInput } from "./input/keyboard";
 import { createRenderer } from "./rendering/renderer";
 import { createScene } from "./scene/scene";
 import "./styles/main.css";
+import { createHud } from "./ui/hud";
 
 const canvas = document.createElement("canvas");
 canvas.setAttribute(

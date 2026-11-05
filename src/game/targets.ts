@@ -12,7 +12,12 @@ export function getTargetPosition(
   if (difficulty === "normal") return [x, y, z];
 
   const amplitude = 1.75;
-  const angularSpeed = (difficulty === "hard" ? 0.85 : 1.45) * (1 + index * 0.12);
+  const angularSpeed =
+    (difficulty === "hard" ? 0.85 : 1.45) * (1 + index * 0.12);
   const direction = index % 2 === 0 ? 1 : -1;
-  return [x + direction * amplitude * Math.sin(angularSpeed * Math.max(0, time)), y, z];
+  return [
+    x + direction * amplitude * Math.sin(angularSpeed * Math.max(0, time)),
+    y,
+    z,
+  ];
 }
