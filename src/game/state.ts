@@ -1,5 +1,6 @@
 import { AIMING } from "../config/gameplay";
-import { launchProjectile } from "./physics";
+import { TARGETS } from "../config/scene";
+import { firstImpact, launchProjectile } from "./physics";
 import type { AimingInput, GameState } from "./types";
 
 export function createGameState(): GameState {
@@ -8,6 +9,7 @@ export function createGameState(): GameState {
     elevation: AIMING.initialElevation,
     powerLevel: 1,
     projectile: null,
+    hitTargets: TARGETS.map(() => false),
   };
 }
 
@@ -45,7 +47,15 @@ export function updateGameState(
   // Evaluate the ballistic formula from launch time, not by accumulating
   // a displacement per frame. This keeps the trajectory independent of FPS.
   if (state.projectile !== null && dt > 0) {
-    state.projectile.elapsed += dt;
+    const shot = state.projectile;
+    const end = shot.elapsed + dt;
+    const impact = firstImpact(shot, shot.elapsed, end, TARGETS, state.hitTargets);
+    if (impact !== null) {
+      if (impact.kind === "target") state.hitTargets[impact.index] = true;
+      state.projectile = null;
+    } else {
+      shot.elapsed = end;
+    }
     changed = true;
   }
   return changed;

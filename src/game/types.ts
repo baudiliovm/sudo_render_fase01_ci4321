@@ -26,4 +26,5 @@ export interface ActiveProjectile {
 export interface GameState extends TurretPose {
   powerLevel: PowerLevel;
   projectile: ActiveProjectile | null;
+  hitTargets: boolean[];
 }

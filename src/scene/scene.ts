@@ -18,7 +18,8 @@ export function createScene(state: GameState): SceneObject[] {
       color: COLORS.ground,
     },
   ];
-  for (const target of TARGETS) {
+  for (const [index, target] of TARGETS.entries()) {
+    if (state.hitTargets[index]) continue;
     objects.push({
       mesh: "sphere",
       model: transform(target.position, [
